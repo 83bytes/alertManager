@@ -20,6 +20,8 @@ func init() {
 }
 
 func validateCmdRun(cmd *cobra.Command, args []string) {
-	// config.Validate()
+	// TODO:
+	// Get file from command options
+	// call validate on it
 	fmt.Println("validate called")
 }

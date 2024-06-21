@@ -19,7 +19,7 @@
 
 alertmanager server --port abcd --pprof-port efgh --config /path-to-file --loglevel
 
-alertmanager config generate-template --out-file
+alertmanager config generate-template > outfile
 alertmanager config validate --config-file
 
 ## Flow

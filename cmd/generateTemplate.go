@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"alertmanager/config"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -11,13 +12,14 @@ var generateTemplateCmd = &cobra.Command{
 	Use:   "generate-template",
 	Short: "generate a sample config template",
 
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("generateTemplate called")
-	},
+	Run: generateTemplateCmdRun,
+}
+
+func generateTemplateCmdRun(cmd *cobra.Command, args []string) {
+	samepleConfig := config.DefaultAlertManagerConfig()
+	fmt.Println(samepleConfig)
 }
 
 func init() {
 	configCmd.AddCommand(generateTemplateCmd)
-
-	// generateTemplateCmd.Flags().String("output-file", "t", false, "Help message for toggle")
 }

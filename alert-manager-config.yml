@@ -1,1 +1,9 @@
-configOptionA: yesy
+alert_pipelines:
+    - alert_name: NOOP_ALERT
+      enrichments:
+        - enrichment_name: NOOP_ENRICHMENT
+          enrichment_args: ARG1,ARG2
+      actions:
+        - action_name: NOOP_ACTION
+          action_args: ARG1,ARG2
+
