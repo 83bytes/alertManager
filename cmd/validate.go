@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"alertmanager/config"
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -10,7 +12,7 @@ import (
 var validateCmd = &cobra.Command{
 	Use:   "validate",
 	Short: "validate a config-file for errors",
-	Run:   validateCmdRun,
+	RunE:  validateCmdRunE,
 }
 
 func init() {
@@ -19,9 +21,20 @@ func init() {
 	validateCmd.Flags().String("config-file", "./alert-manager-config.yml", "Path to config for validation")
 }
 
-func validateCmdRun(cmd *cobra.Command, args []string) {
-	// TODO:
-	// Get file from command options
-	// call validate on it
-	fmt.Println("validate called")
+func validateCmdRunE(cmd *cobra.Command, args []string) error {
+	configFilePath, _ := cmd.Flags().GetString("config-file")
+
+	b, err := os.ReadFile(configFilePath)
+	if err != nil {
+		return fmt.Errorf("cannot read config file; %s", err)
+	}
+
+	amConfig, err := config.ValidateAndLoad(b)
+	if err != nil {
+		return fmt.Errorf("validation failed: please refer to template; %s", err)
+	}
+
+	fmt.Println("config is correct; printing loaded config")
+	fmt.Println(amConfig)
+	return nil
 }

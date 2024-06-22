@@ -49,18 +49,31 @@ func DefaultAlertManagerConfig() AlertManagerConfig {
 }
 
 func (c AlertManagerConfig) String() string {
-	s, err := yaml.Marshal(c)
-	if err != nil {
-		fmt.Println("eror", err)
-		// TODO: handle properly
-	}
+	s, _ := yaml.Marshal(c)
+	// we dont need to look at this error as we are marshalling a struct.
+	// all error that can happen from loading random data into a struct are
+	// handled at the ValidateAndLoad level
 	return string(s)
 }
 
-func (c AlertManagerConfig) Validate() error {
-	fmt.Println("Validate Config")
-	fmt.Println(c)
-	return nil
-	// TODO: add validation code
-	// Returns Count of rules present, error
+func ValidateAndLoad(b []byte) (AlertManagerConfig, error) {
+	amConfig := AlertManagerConfig{}
+
+	err := yaml.Unmarshal(b, &amConfig)
+	if err != nil {
+		return AlertManagerConfig{},
+			fmt.Errorf("unable to load config, please check format; %s", err)
+	}
+
+	if len(b) > 0 && amConfig.AlertPipelines == nil {
+		return AlertManagerConfig{},
+			fmt.Errorf("unable to load config, please check format; %s", err)
+	}
+	// todo:
+	// do better validation
+	// right now it accepts a stray key in the list of alert_pipelines
+	// and ingects an empty alert-config
+	// Filter out the empty entr for now.
+	// maybe check if json-schema etc can help here
+	return amConfig, nil
 }
