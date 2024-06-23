@@ -1,4 +1,4 @@
-package cmd
+package logging
 
 import (
 	"fmt"
@@ -7,11 +7,16 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+type Logger struct {
+	*logrus.Logger
+}
+
 var DEFAULT_LOG_LEVEL = "INFO"
+var log = logrus.New()
 
-func setLogLevelE(log *logrus.Logger, ll string) error {
+func NewLogger(logLevel string) (*Logger, error) {
 
-	switch strings.ToUpper(ll) {
+	switch strings.ToUpper(logLevel) {
 	case "INFO":
 		log.Info("info logs enabled")
 		log.SetLevel(logrus.InfoLevel)
@@ -22,8 +27,12 @@ func setLogLevelE(log *logrus.Logger, ll string) error {
 		log.Info("error logs enabled")
 		log.SetLevel(logrus.ErrorLevel)
 	default:
-		return fmt.Errorf("unsupported log-level %s; refer docs", ll)
+		return nil, fmt.Errorf("unsupported log-level %s; refer docs", logLevel)
 	}
 
-	return nil
+	return &Logger{log}, nil
+}
+
+func GetLogger() *Logger {
+	return &Logger{log}
 }

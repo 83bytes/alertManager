@@ -1,0 +1,37 @@
+{
+  "version": "4",
+  "groupKey": "",
+  "truncatedAlerts": 0,
+  "status": "firing",
+  "receiver": "<string>",
+  "groupLabels": {},
+  "commonLabels": {},
+  "commonAnnotations": {},
+  "externalURL": "https://something",
+  "alerts": [
+    {
+      "annotations": {
+        "description": "Pod customer/customer-test-service-9b75b488c-cpfd7 (test-service) is restarting 2.11 times / 10 minutes.",
+        "runbook_url": "https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepodcrashlooping",
+        "summary": "Pod is crash looping."
+      },
+      "labels": {
+        "alertname": "KubePodCrashLooping",
+        "cluster": "cluster-main",
+        "container": "test-service",
+        "endpoint": "http",
+        "job": "kube-state-metrics",
+        "namespace": "customer",
+        "pod": "customer-test-service-9b75b488c-cpfd7",
+        "priority": "P0",
+        "prometheus": "monitoring/kube-prometheus-stack-prometheus",
+        "region": "us-west-1",
+        "replica": "0",
+        "service": "kube-prometheus-stack-kube-state-metrics",
+        "severity": "CRITICAL"
+      },
+      "startsAt": "2022-03-02T07:31:57.339Z",
+      "status": "firing"
+    }
+  ]
+}

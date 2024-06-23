@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"alertmanager/config"
+	"alertmanager/logging"
 	"alertmanager/server"
 	"fmt"
 	"os"
 
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -23,8 +23,7 @@ func serverCommandRunE(cmd *cobra.Command, args []string) error {
 	mgmtPort, _ := cmd.Flags().GetInt("meanagement-port")
 	cFile, _ := cmd.Flags().GetString("config-file")
 
-	log := logrus.New()
-	err := setLogLevelE(log, ll)
+	log, err := logging.NewLogger(ll)
 	if err != nil {
 		return err
 	}
@@ -58,5 +57,5 @@ func init() {
 	// serverCmd.Flags().Int("metric-port", 8082, "metrics port to listen on")
 	// serverCmd.Flags().Int("management-port", 8083, "management port to listen on")
 	serverCmd.Flags().String("config-file", "./alert-manager-config.yml", "Path to alert config")
-	serverCmd.Flags().String("log-level", DEFAULT_LOG_LEVEL, "log-level for alertmanager; options INFO|DEBUG|ERROR")
+	serverCmd.Flags().String("log-level", logging.DEFAULT_LOG_LEVEL, "log-level for alertmanager; options INFO|DEBUG|ERROR")
 }
