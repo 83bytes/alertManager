@@ -1,7 +1,6 @@
 - Use https://github.com/alecthomas/kong for config management (or use [flag](https://pkg.go.dev/flag) from the STL)
   - CLI params
     - --server-port
-    - --pprof-port
     - --alerting-config
     - --auth-config
 - Use [net/http]

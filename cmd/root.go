@@ -7,7 +7,6 @@ import (
 )
 
 var version = "0.0.1"
-var DEFAULT_LOG_LEVEL = "INFO"
 
 var rootCmd = &cobra.Command{
 	Use:     "alertmanager",
@@ -25,5 +24,5 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().String("log-level", DEFAULT_LOG_LEVEL, "log-level for alertmanager; options INFO|DEBUG|ERROR")
+
 }

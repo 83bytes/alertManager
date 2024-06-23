@@ -1,8 +1,10 @@
 package cmd
 
 import (
-	"fmt"
+	"alertmanager/config"
+	"alertmanager/server"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -13,22 +15,36 @@ var serverCmd = &cobra.Command{
 }
 
 func serverCommandRunE(cmd *cobra.Command, args []string) error {
-	fmt.Println("Server is being called")
 	ll, _ := cmd.Flags().GetString("log-level")
-	fmt.Println(ll)
+	sPort, _ := cmd.Flags().GetInt("server-port")
+	mPort, _ := cmd.Flags().GetInt("metric-port")
+	mgmtPort, _ := cmd.Flags().GetInt("meanagement-port")
+	// _, _ := cmd.Flags().GetString("config-file")
+
+	log := logrus.New()
+	err := setLogLevelE(log, ll)
+	if err != nil {
+		return err
+	}
+
+	var s = server.Server{
+		ServerPort:     sPort,
+		MetricsPort:    mPort,
+		ManagementPort: mgmtPort,
+		Config:         &config.AlertManagerConfig{},
+		Log:            log,
+	}
+
+	s.Start()
 	return nil
 }
 
 func init() {
 	rootCmd.AddCommand(serverCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// serverCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// serverCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	serverCmd.Flags().Int("server-port", 8081, "Port to listen on")
+	serverCmd.Flags().Int("metric-port", 8082, "metrics port to listen on")
+	serverCmd.Flags().Int("management-port", 8083, "management port to listen on")
+	serverCmd.Flags().String("config-file", "./alert-manager-config.yml", "Path to alert config")
+	serverCmd.Flags().String("log-level", DEFAULT_LOG_LEVEL, "log-level for alertmanager; options INFO|DEBUG|ERROR")
 }
