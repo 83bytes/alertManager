@@ -3,7 +3,11 @@ package server
 import (
 	"alertmanager/config"
 	"fmt"
+	"os"
+	"os/signal"
 	"strconv"
+	"sync"
+	"time"
 
 	"github.com/sirupsen/logrus"
 
@@ -15,7 +19,7 @@ type Server struct {
 	ServerPort     int
 	MetricsPort    int
 	ManagementPort int
-	Config         *config.AlertManagerConfig
+	Config         config.AlertManagerConfig
 	Log            *logrus.Logger
 }
 
@@ -24,12 +28,38 @@ func (s *Server) Start() error {
 
 	app := fiber.New()
 
+	// handle gradeful app shutdown
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt) // SIGINT
+
+	var serverShutDownWG sync.WaitGroup // wait for the server to shutdown cleanly
+
+	// shutdown server upon SIGINT and signal the waitgroup
+	go func() {
+		<-c
+
+		s.Log.Info("shutting down server cleanly; please wait :)")
+		serverShutDownWG.Add(1)
+		defer serverShutDownWG.Done()
+
+		_ = app.ShutdownWithTimeout(time.Second * 30)
+	}()
+
+	// request logger middlewear
+	// should be okay as long the server is low-volume
+	// maybe we can configure to log only bad / failed reqs
 	app.Use(logger.New())
 
 	app.Get("/ping", func(c *fiber.Ctx) error {
 		return c.SendString("pong")
 	})
 
-	app.Listen(":" + strconv.Itoa(s.ServerPort))
+	app.Post("/webhook/", alertWebhookHandler)
+
+	if err := app.Listen(":" + strconv.Itoa(s.ServerPort)); err != nil {
+		s.Log.Error("server: unable to start server", err)
+	}
+
+	serverShutDownWG.Wait()
 	return nil
 }

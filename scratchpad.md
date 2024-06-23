@@ -5,10 +5,10 @@
     - --auth-config
 - Use [net/http]
   - needs 2 min endpoints
-    - POST / (for getting webhook)
+    - POST /webhook (for getting webhook)
     - POST /~/reload to reload config
     - GET /~/config to get current loaded config
-    - GET /health
+    - GET /ping
 - Use logrus for logging
 - Tests
 

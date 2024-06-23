@@ -67,7 +67,7 @@ func ValidateAndLoad(b []byte) (AlertManagerConfig, error) {
 
 	if len(b) > 0 && amConfig.AlertPipelines == nil {
 		return AlertManagerConfig{},
-			fmt.Errorf("unable to load config, please check format; %s", err)
+			fmt.Errorf("unable to load config, please check format")
 	}
 	// todo:
 	// do better validation

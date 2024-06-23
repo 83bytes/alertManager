@@ -3,6 +3,8 @@ package cmd
 import (
 	"alertmanager/config"
 	"alertmanager/server"
+	"fmt"
+	"os"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -19,7 +21,7 @@ func serverCommandRunE(cmd *cobra.Command, args []string) error {
 	sPort, _ := cmd.Flags().GetInt("server-port")
 	mPort, _ := cmd.Flags().GetInt("metric-port")
 	mgmtPort, _ := cmd.Flags().GetInt("meanagement-port")
-	// _, _ := cmd.Flags().GetString("config-file")
+	cFile, _ := cmd.Flags().GetString("config-file")
 
 	log := logrus.New()
 	err := setLogLevelE(log, ll)
@@ -27,11 +29,20 @@ func serverCommandRunE(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	b, err := os.ReadFile(cFile)
+	if err != nil {
+		return fmt.Errorf("cannot read config file; %s", err)
+	}
+	amConfig, err := config.ValidateAndLoad(b)
+	if err != nil {
+		return fmt.Errorf("validation failed: please refer to template; %s", err)
+	}
+
 	var s = server.Server{
 		ServerPort:     sPort,
 		MetricsPort:    mPort,
 		ManagementPort: mgmtPort,
-		Config:         &config.AlertManagerConfig{},
+		Config:         amConfig,
 		Log:            log,
 	}
 
@@ -43,8 +54,9 @@ func init() {
 	rootCmd.AddCommand(serverCmd)
 
 	serverCmd.Flags().Int("server-port", 8081, "Port to listen on")
-	serverCmd.Flags().Int("metric-port", 8082, "metrics port to listen on")
-	serverCmd.Flags().Int("management-port", 8083, "management port to listen on")
+	// todo set up management api and metrics endpoint
+	// serverCmd.Flags().Int("metric-port", 8082, "metrics port to listen on")
+	// serverCmd.Flags().Int("management-port", 8083, "management port to listen on")
 	serverCmd.Flags().String("config-file", "./alert-manager-config.yml", "Path to alert config")
 	serverCmd.Flags().String("log-level", DEFAULT_LOG_LEVEL, "log-level for alertmanager; options INFO|DEBUG|ERROR")
 }
