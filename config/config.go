@@ -59,6 +59,8 @@ func (c AlertManagerConfig) String() string {
 func ValidateAndLoad(b []byte) (AlertManagerConfig, error) {
 	amConfig := AlertManagerConfig{}
 
+	// todo
+	// try to use a strict unmarshalling like in json
 	err := yaml.Unmarshal(b, &amConfig)
 	if err != nil {
 		return AlertManagerConfig{},

@@ -2,14 +2,12 @@ package server
 
 import (
 	"alertmanager/config"
-	"fmt"
+	"alertmanager/logging"
 	"os"
 	"os/signal"
 	"strconv"
 	"sync"
 	"time"
-
-	"github.com/sirupsen/logrus"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -20,12 +18,10 @@ type Server struct {
 	MetricsPort    int
 	ManagementPort int
 	Config         config.AlertManagerConfig
-	Log            *logrus.Logger
+	Log            *logging.Logger
 }
 
 func (s *Server) Start() error {
-	fmt.Printf("Server start called %v", s)
-
 	app := fiber.New()
 
 	// handle gradeful app shutdown
@@ -56,6 +52,8 @@ func (s *Server) Start() error {
 
 	app.Post("/webhook/", alertWebhookHandler)
 
+	logr := logging.GetLogger()
+	logr.Info("Starting Server ...")
 	if err := app.Listen(":" + strconv.Itoa(s.ServerPort)); err != nil {
 		s.Log.Error("server: unable to start server", err)
 	}
