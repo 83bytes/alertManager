@@ -1,6 +1,8 @@
 package config
 
 import (
+	"alertmanager/action"
+	"alertmanager/enrichment"
 	"fmt"
 
 	"gopkg.in/yaml.v3"
@@ -11,34 +13,16 @@ type AlertManagerConfig struct {
 }
 
 type AlertPipelineConfig struct {
-	AlertName   string       `yaml:"alert_name"`
-	Enrichments []Enrichment `yaml:"enrichments"`
-	Actions     []Action     `yaml:"actions"`
-}
-
-type Enrichment struct {
-	EnrichmentName string `yaml:"enrichment_name"`
-	EnrichmentArgs string `yaml:"enrichment_args"`
-}
-
-type Action struct {
-	ActionName string `yaml:"action_name"`
-	ActionArgs string `yaml:"action_args"`
-}
-
-func defaultAction() Action {
-	return Action{ActionName: "NOOP_ACTION", ActionArgs: "ARG1,ARG2"}
-}
-
-func defaultEnrichment() Enrichment {
-	return Enrichment{EnrichmentName: "NOOP_ENRICHMENT", EnrichmentArgs: "ARG1,ARG2"}
+	AlertName   string                  `yaml:"alert_name"`
+	Enrichments []enrichment.Enrichment `yaml:"enrichments"`
+	Actions     []action.Action         `yaml:"actions"`
 }
 
 func defaultAlertPipelineConfig() AlertPipelineConfig {
 	return AlertPipelineConfig{
 		AlertName:   "NOOP_ALERT",
-		Enrichments: []Enrichment{defaultEnrichment()},
-		Actions:     []Action{defaultAction()},
+		Enrichments: []enrichment.Enrichment{enrichment.GetDefaultEnrichment()},
+		Actions:     []action.Action{action.GetDefaultAction()},
 	}
 }
 

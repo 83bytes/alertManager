@@ -11,8 +11,8 @@ import (
 type Alert struct {
 	// fields we use to process stuff
 	alertName   string                  `json:"-"`
-	actions     []action.Action         `json:"-"`
 	enrichments []enrichment.Enrichment `json:"-"`
+	actions     []action.Action         `json:"-"`
 
 	// fields we get from outside
 	Annotations map[string]string `json:"annotations"`

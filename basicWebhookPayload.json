@@ -40,7 +40,7 @@
         "summary": "Pod is crash looping."
       },
       "labels": {
-        "alertname": "KubePodCrashLooping",
+        "alertname": "KubePodCrashLooping2",
         "cluster": "cluster-main",
         "container": "test-service",
         "endpoint": "http",

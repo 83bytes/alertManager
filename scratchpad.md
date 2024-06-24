@@ -24,3 +24,7 @@ alertmanager config validate --config-file
 ## Flow
 
 Alert -> Enrichment(s) -> Action(s)
+
+## OverAll Plan
+
+- I load the config to see

@@ -1,1 +1,8 @@
-ram: test
+alert_pipelines:
+  - alert_name: KubePodCrashLooping2
+    enrichments:
+      - enrichment_name: GetMetric
+        enrichment_args: "promql"
+    actions:
+      - action_name: NotifySLack
+        action_args: "url"
