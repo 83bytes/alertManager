@@ -36,6 +36,8 @@ func serverCommandRunE(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return fmt.Errorf("validation failed: please refer to template; %s", err)
 	}
+	fmt.Println("printing config")
+	fmt.Println(amConfig)
 
 	var s = server.Server{
 		ServerPort:     sPort,

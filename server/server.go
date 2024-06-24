@@ -17,7 +17,7 @@ type Server struct {
 	ServerPort     int
 	MetricsPort    int
 	ManagementPort int
-	Config         config.AlertManagerConfig
+	Config         *config.AlertManagerConfig
 	Log            *logging.Logger
 }
 

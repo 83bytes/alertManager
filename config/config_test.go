@@ -72,7 +72,7 @@ func TestValidateAndLoad(t *testing.T) {
 			name: "Random Yaml",
 			args: args{
 				b: []byte(`randomKey: randonValue
-randomKey2: randomValue2`),
+		randomKey2: randomValue2`),
 			},
 			want:    AlertManagerConfig{},
 			wantErr: true,
@@ -85,8 +85,10 @@ randomKey2: randomValue2`),
 				t.Errorf("ValidateAndLoad() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ValidateAndLoad() = %v, want %v", got, tt.want)
+
+			// dereference the pointer for got to make deepequal happy
+			if !reflect.DeepEqual(*got, tt.want) {
+				t.Errorf("ValidateAndLoad() = \n%v, want \n%v", got, tt.want)
 			}
 		})
 	}

@@ -34,7 +34,7 @@ func validateCmdRunE(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("validation failed: please refer to template; %s", err)
 	}
 
-	fmt.Println("config is correct; printing loaded config")
+	fmt.Println("config is correct; printing config")
 	fmt.Println(amConfig)
 	return nil
 }

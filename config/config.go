@@ -40,19 +40,27 @@ func (c AlertManagerConfig) String() string {
 	return string(s)
 }
 
-func ValidateAndLoad(b []byte) (AlertManagerConfig, error) {
-	amConfig := AlertManagerConfig{}
+// we create a global instance of AlertManagerConfig
+
+var AmConfig = new(AlertManagerConfig)
+
+func GetAmConfig() *AlertManagerConfig {
+	return AmConfig
+}
+
+func ValidateAndLoad(b []byte) (*AlertManagerConfig, error) {
+	amConfig := GetAmConfig()
 
 	// todo
 	// try to use a strict unmarshalling like in json
 	err := yaml.Unmarshal(b, &amConfig)
 	if err != nil {
-		return AlertManagerConfig{},
+		return &AlertManagerConfig{},
 			fmt.Errorf("unable to load config, please check format; %s", err)
 	}
 
 	if len(b) > 0 && amConfig.AlertPipelines == nil {
-		return AlertManagerConfig{},
+		return &AlertManagerConfig{},
 			fmt.Errorf("unable to load config, please check format")
 	}
 	// todo:
