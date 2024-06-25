@@ -29,12 +29,11 @@ func alertWebhookHandler(c *fiber.Ctx) error {
 	nalerts := len(alerts)
 	for i := 0; i < nalerts; i++ {
 		logr.Debugf(`loading alert %d -> %v`, i, alerts[i])
-		a := alerts[i]
-		err := alert.LoadAlertFromPayload(&a)
+		err := alert.LoadAlertFromPayload(&alerts[i])
 		if err != nil {
 			return c.SendStatus(fiber.StatusBadRequest)
 		}
-		logr.Debugf("%s", a.GetAlertName())
+		logr.Debugf("alertname found in payload : %s", alerts[i].GetAlertName())
 	}
 
 	// now that we know that all the alerts in the payload are processable
@@ -45,6 +44,7 @@ func alertWebhookHandler(c *fiber.Ctx) error {
 	// todo
 	// do we want to use go-routines and channels here ?
 	// ideally would depend on the volume here
+
 	for i := 0; i < nalerts; i++ {
 		logr.Debugf(`processing alert %d -> %v`, i, alerts[i])
 		alert.ProcessAlert(alerts[i])

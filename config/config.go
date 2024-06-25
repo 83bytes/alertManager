@@ -3,6 +3,7 @@ package config
 import (
 	"alertmanager/action"
 	"alertmanager/enrichment"
+	"alertmanager/logging"
 	"fmt"
 
 	"gopkg.in/yaml.v3"
@@ -51,6 +52,8 @@ func GetAmConfig() *AlertManagerConfig {
 func ValidateAndLoad(b []byte) (*AlertManagerConfig, error) {
 	amConfig := GetAmConfig()
 
+	// todo protect this by a Mutex
+	// a write mutex is enough
 	// todo
 	// try to use a strict unmarshalling like in json
 	err := yaml.Unmarshal(b, &amConfig)
@@ -70,4 +73,16 @@ func ValidateAndLoad(b []byte) (*AlertManagerConfig, error) {
 	// Filter out the empty entr for now.
 	// maybe check if json-schema etc can help here
 	return amConfig, nil
+}
+
+func (am *AlertManagerConfig) GetPipelineForAlert(name string) *AlertPipelineConfig {
+	logr := logging.GetLogger()
+	for _, pipes := range am.AlertPipelines {
+		if pipes.AlertName == name {
+			logr.Debug("Pipeline found for alert : ", name)
+			return &pipes
+		}
+	}
+	logr.Debug("no pipelines found for alert : ", name)
+	return nil
 }
