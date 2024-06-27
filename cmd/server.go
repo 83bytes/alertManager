@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"alertmanager/config"
+	"alertmanager/enrichment"
 	"alertmanager/logging"
 	"alertmanager/server"
 	"fmt"
@@ -27,6 +28,11 @@ func serverCommandRunE(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
+	// Initialize the Enrichments
+	log.Info("Adding NooP Enrichment")
+	enr := enrichment.GetEnrichmentMap()
+	enr.Add("NOOP_ENRICHMENT", enrichment.Noop_Enrichment)
 
 	b, err := os.ReadFile(cFile)
 	if err != nil {
