@@ -3,8 +3,9 @@ package enrichment
 import "alertmanager/utils"
 
 type Enrichment struct {
-	EnrichmentName string `yaml:"enrichment_name"`
-	EnrichmentArgs string `yaml:"enrichment_args"`
+	EnrichmentName   string `yaml:"enrichment_name"`
+	EnrichmentArgs   string `yaml:"enrichment_args"`
+	EnrichmentResult string `yaml:"-"`
 }
 
 func GetDefaultEnrichment() Enrichment {

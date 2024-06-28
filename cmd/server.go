@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"alertmanager/action"
 	"alertmanager/config"
 	"alertmanager/enrichment"
 	"alertmanager/logging"
@@ -32,7 +33,12 @@ func serverCommandRunE(cmd *cobra.Command, args []string) error {
 	// Initialize the Enrichments
 	log.Info("Adding NooP Enrichment")
 	enr := enrichment.GetEnrichmentMap()
-	enr.Add("NOOP_ENRICHMENT", enrichment.Noop_Enrichment)
+	enr.Add("NOOP_ENRICHMENT", enrichment.NoopEnrichment)
+
+	// Initialize the Actions
+	log.Info("Adding NooP Action")
+	actMap := action.GetActionMap()
+	actMap.Add("NOOP_ACTION", action.NoopAction)
 
 	b, err := os.ReadFile(cFile)
 	if err != nil {
