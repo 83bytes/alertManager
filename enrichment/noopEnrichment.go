@@ -5,10 +5,10 @@ import (
 	"fmt"
 )
 
-func NoopEnrichment(args string) (string, error) {
+func NoopEnrichment(e Enrichment) (interface{}, error) {
 	logr := logging.GetLogger()
 
-	rs := fmt.Sprint("noop enrichment called with : ", args)
+	rs := fmt.Sprint("noop enrichment called with : ", e.EnrichmentArgs)
 	logr.Info(rs)
 
 	return rs, nil

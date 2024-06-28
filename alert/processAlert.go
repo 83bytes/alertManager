@@ -19,7 +19,7 @@ func ProcessAlert(a Alert) {
 	logr := logging.GetLogger()
 	an := a.GetAlertName()
 
-	logr.Debug("alert processor", an)
+	logr.Info("alert being processed : ", an)
 
 	amc := config.GetAmConfig()
 	p := amc.GetPipelineForAlert(an)
@@ -27,38 +27,36 @@ func ProcessAlert(a Alert) {
 		logr.Infof("no alert-pipeline configured for %s", an)
 		return
 	}
-	logr.Debug("alert pipeline name", (*p))
+	logr.Debug("alert pipeline found for ", (*p))
 
 	enrichmentMap := enrichment.GetEnrichmentMap()
 	actionMap := action.GetActionMap()
 
 	// these are used to capture the result of the enrichments
-	enrichmentRes := ""
 	var err error
+	resMap := make(map[string]interface{}, len(p.Enrichments))
 
+	// process enrichments
 	for _, v := range (*p).Enrichments {
 		logr.Info("processing enrichment : ", v.EnrichmentName)
 
 		if f, ok := (*enrichmentMap)[v.EnrichmentName]; ok {
-			enrichmentRes, err = f(v.EnrichmentArgs)
+			resMap[v.EnrichmentName], err = f(v)
 			if err != nil {
 				fmt.Println(err)
 			}
-			fmt.Print("********** ", enrichmentRes, "*****")
 		}
 	}
 
-	fmt.Print("ENRICHMENT RESP ************* ", enrichmentRes)
-
+	// process actions
 	for _, v := range (*p).Actions {
 		logr.Info("processing action : ", v.ActionName)
 
 		if f, ok := (*actionMap)[v.ActionName]; ok {
-			x, err := f(v.ActionArgs + enrichmentRes)
+			err := f(v, resMap)
 			if err != nil {
 				fmt.Println(err)
 			}
-			fmt.Print("################## ", x)
 		}
 	}
 

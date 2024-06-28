@@ -5,10 +5,18 @@ import (
 	"fmt"
 )
 
-func NoopAction(args string) (string, error) {
+func NoopAction(a Action, resultMap map[string]interface{}) error {
 	logr := logging.GetLogger()
+	logr.Debug("noop action called")
+	rs := fmt.Sprintf("noop action called \n")
 
-	rs := fmt.Sprint("Noop Action Called; with output of enrichment ", args)
-	logr.Info(rs)
-	return rs, nil
+	for k, v := range resultMap {
+		if s, ok := v.(string); ok {
+			rs += fmt.Sprintf("result of %s enrichment; is -> %s \n", k, s)
+		}
+
+	}
+
+	logr.Debug(rs)
+	return nil
 }
