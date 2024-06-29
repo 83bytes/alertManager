@@ -1,17 +1,15 @@
-package alert
+package types
 
 import (
-	"alertmanager/types"
 	"encoding/json"
-	"fmt"
 	"time"
 )
 
 type Alert struct {
 	// fields we use to process stuff
-	alertName   string             `json:"-"`
-	enrichments []types.Enrichment `json:"-"`
-	actions     []types.Action     `json:"-"`
+	AlertName   string       `json:"-"`
+	Enrichments []Enrichment `json:"-"`
+	Actions     []Action     `json:"-"`
 
 	// fields we get from outside
 	Annotations map[string]string `json:"annotations"`
@@ -35,7 +33,7 @@ type AlertGroup struct {
 
 // getter and setter for internal fields
 func (a *Alert) GetAlertName() string {
-	return a.alertName
+	return a.AlertName
 }
 
 func (c AlertGroup) String() string {
@@ -44,12 +42,4 @@ func (c AlertGroup) String() string {
 	// all error that can happen from loading random data into a struct are
 	// handled at the ValidateAndLoad level
 	return string(s)
-}
-
-func LoadAlertFromPayload(a *Alert) error {
-	if an, ok := a.Labels["alertname"]; ok {
-		a.alertName = an
-		return nil
-	}
-	return fmt.Errorf("alertname not present in alert payload")
 }

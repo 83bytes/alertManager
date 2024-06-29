@@ -3,6 +3,7 @@ package server
 import (
 	"alertmanager/alert"
 	"alertmanager/logging"
+	"alertmanager/types"
 	"alertmanager/utils"
 
 	"github.com/gofiber/fiber/v2"
@@ -11,7 +12,7 @@ import (
 func alertWebhookHandler(c *fiber.Ctx) error {
 	logr := logging.GetLogger()
 	logr.Debug("in webhook handler")
-	ag := new(alert.AlertGroup)
+	ag := new(types.AlertGroup)
 
 	b := c.BodyRaw()
 

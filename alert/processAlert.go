@@ -5,8 +5,17 @@ import (
 	"alertmanager/config"
 	"alertmanager/enrichment"
 	"alertmanager/logging"
+	"alertmanager/types"
 	"fmt"
 )
+
+func LoadAlertFromPayload(a *types.Alert) error {
+	if an, ok := a.Labels["alertname"]; ok {
+		a.AlertName = an
+		return nil
+	}
+	return fmt.Errorf("alertname not present in alert payload")
+}
 
 // Processes an entire alert-pipeline end-to-end
 // If an alert-pipeline is configured for given alert
@@ -15,7 +24,7 @@ import (
 // The body of the Action is passed to all the enrichment and action
 // so that they have the complete context regarding what is going on
 // The actions additionally will also contain the output of all the enrichments
-func ProcessAlert(a Alert) {
+func ProcessAlert(a types.Alert) {
 	logr := logging.GetLogger()
 	an := a.GetAlertName()
 
