@@ -2,10 +2,11 @@ package enrichment
 
 import (
 	"alertmanager/logging"
+	"alertmanager/types"
 	"fmt"
 )
 
-func NoopEnrichment(e Enrichment) (interface{}, error) {
+func NoopEnrichment(e types.Enrichment) (interface{}, error) {
 	logr := logging.GetLogger()
 
 	rs := fmt.Sprint("noop enrichment called with : ", e.EnrichmentArgs)

@@ -1,16 +1,15 @@
 package enrichment
 
-type Enrichment struct {
-	EnrichmentName string `yaml:"enrichment_name"`
-	EnrichmentArgs string `yaml:"enrichment_args"`
-}
-
-func GetDefaultEnrichment() Enrichment {
-	return Enrichment{EnrichmentName: "NOOP_ENRICHMENT", EnrichmentArgs: "ARG1,ARG2"}
-}
+import "alertmanager/types"
 
 var enrichmentMap = make(EnrichmentLut)
 
 func GetEnrichmentMap() *EnrichmentLut {
 	return &enrichmentMap
+}
+
+type EnrichmentLut map[string]func(types.Enrichment) (interface{}, error)
+
+func (flut EnrichmentLut) Add(fname string, f func(types.Enrichment) (interface{}, error)) {
+	flut[fname] = f
 }

@@ -2,10 +2,11 @@ package action
 
 import (
 	"alertmanager/logging"
+	"alertmanager/types"
 	"fmt"
 )
 
-func NoopAction(a Action, resultMap map[string]interface{}) error {
+func NoopAction(a types.Action, resultMap map[string]interface{}) error {
 	logr := logging.GetLogger()
 	logr.Debug("noop action called")
 	rs := fmt.Sprintf("noop action called \n")

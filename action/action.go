@@ -1,16 +1,15 @@
 package action
 
-type Action struct {
-	ActionName string `yaml:"action_name"`
-	ActionArgs string `yaml:"action_args"`
-}
-
-func GetDefaultAction() Action {
-	return Action{ActionName: "NOOP_ACTION", ActionArgs: "ARG1,ARG2"}
-}
+import "alertmanager/types"
 
 var actionMap = make(ActionLut)
 
 func GetActionMap() *ActionLut {
 	return &actionMap
+}
+
+type ActionLut map[string]func(types.Action, map[string]interface{}) error
+
+func (flut ActionLut) Add(fname string, f func(types.Action, map[string]interface{}) error) {
+	flut[fname] = f
 }

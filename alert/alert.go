@@ -1,8 +1,7 @@
 package alert
 
 import (
-	"alertmanager/action"
-	"alertmanager/enrichment"
+	"alertmanager/types"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -10,9 +9,9 @@ import (
 
 type Alert struct {
 	// fields we use to process stuff
-	alertName   string                  `json:"-"`
-	enrichments []enrichment.Enrichment `json:"-"`
-	actions     []action.Action         `json:"-"`
+	alertName   string             `json:"-"`
+	enrichments []types.Enrichment `json:"-"`
+	actions     []types.Action     `json:"-"`
 
 	// fields we get from outside
 	Annotations map[string]string `json:"annotations"`
@@ -37,22 +36,6 @@ type AlertGroup struct {
 // getter and setter for internal fields
 func (a *Alert) GetAlertName() string {
 	return a.alertName
-}
-
-func (a *Alert) GetActions() []action.Action {
-	return a.actions
-}
-
-func (a *Alert) SetActions(actions []action.Action) {
-	a.actions = actions
-}
-
-func (a *Alert) GetEnrichments() []enrichment.Enrichment {
-	return a.enrichments
-}
-
-func (a *Alert) SetEnrichments(enrichments []enrichment.Enrichment) {
-	a.enrichments = enrichments
 }
 
 func (c AlertGroup) String() string {
