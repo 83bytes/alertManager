@@ -1,6 +1,7 @@
 package config
 
 import (
+	"alertmanager/types"
 	"reflect"
 	"testing"
 )
@@ -44,7 +45,7 @@ func TestValidateAndLoad(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    AlertManagerConfig
+		want    types.AlertManagerConfig
 		wantErr bool
 	}{
 		{
@@ -52,7 +53,7 @@ func TestValidateAndLoad(t *testing.T) {
 			args: args{
 				b: []byte(goodSingleAlertConfig),
 			},
-			want:    DefaultAlertManagerConfig(),
+			want:    types.DefaultAlertManagerConfig(),
 			wantErr: false,
 		},
 		{
@@ -60,10 +61,10 @@ func TestValidateAndLoad(t *testing.T) {
 			args: args{
 				b: []byte(goodDoubleAlertConfig),
 			},
-			want: AlertManagerConfig{
-				AlertPipelines: []AlertPipelineConfig{
-					defaultAlertPipelineConfig(),
-					defaultAlertPipelineConfig(),
+			want: types.AlertManagerConfig{
+				AlertPipelines: []types.AlertPipelineConfig{
+					types.DefaultAlertPipelineConfig(),
+					types.DefaultAlertPipelineConfig(),
 				},
 			},
 			wantErr: false,
@@ -74,7 +75,7 @@ func TestValidateAndLoad(t *testing.T) {
 				b: []byte(`randomKey: randonValue
 		randomKey2: randomValue2`),
 			},
-			want:    AlertManagerConfig{},
+			want:    types.AlertManagerConfig{},
 			wantErr: true,
 		},
 	}

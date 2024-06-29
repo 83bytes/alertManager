@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"alertmanager/config"
+	"alertmanager/types"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -16,7 +16,7 @@ var generateTemplateCmd = &cobra.Command{
 }
 
 func generateTemplateCmdRun(cmd *cobra.Command, args []string) {
-	samepleConfig := config.DefaultAlertManagerConfig()
+	samepleConfig := types.DefaultAlertManagerConfig()
 	fmt.Println(samepleConfig)
 }
 

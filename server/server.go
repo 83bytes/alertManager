@@ -1,8 +1,8 @@
 package server
 
 import (
-	"alertmanager/config"
 	"alertmanager/logging"
+	"alertmanager/types"
 	"os"
 	"os/signal"
 	"strconv"
@@ -17,7 +17,7 @@ type Server struct {
 	ServerPort     int
 	MetricsPort    int
 	ManagementPort int
-	Config         *config.AlertManagerConfig
+	Config         *types.AlertManagerConfig
 	Log            *logging.Logger
 }
 
