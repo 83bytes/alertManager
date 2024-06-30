@@ -63,6 +63,8 @@ func ProcessAlert(a types.Alert) {
 			if err != nil {
 				fmt.Println(err)
 			}
+		} else {
+			logr.Info("no enrichment found with name: ", v.EnrichmentName)
 		}
 	}
 
@@ -75,6 +77,8 @@ func ProcessAlert(a types.Alert) {
 			if err != nil {
 				fmt.Println(err)
 			}
+		} else {
+			logr.Info("no action found with name: ", v.ActionName)
 		}
 	}
 }

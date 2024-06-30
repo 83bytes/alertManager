@@ -31,14 +31,12 @@ func serverCommandRunE(cmd *cobra.Command, args []string) error {
 	}
 
 	// Initialize the Enrichments
-	log.Info("Adding NooP Enrichment")
-	enr := enrichment.GetEnrichmentMap()
-	enr.Add("NOOP_ENRICHMENT", enrichment.NoopEnrichment)
+	log.Info("loading pre-defined enrichments")
+	enrichment.LoadEnrichments()
 
 	// Initialize the Actions
 	log.Info("Adding NooP Action")
-	actMap := action.GetActionMap()
-	actMap.Add("NOOP_ACTION", action.NoopAction)
+	action.LoadActions()
 
 	b, err := os.ReadFile(cFile)
 	if err != nil {
