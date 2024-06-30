@@ -6,11 +6,12 @@ import (
 	"fmt"
 )
 
-func NoopEnrichment(e types.Enrichment) (interface{}, error) {
+func NoopEnrichment(alert types.Alert, e types.Enrichment) (interface{}, error) {
 	logr := logging.GetLogger()
 
-	rs := fmt.Sprint("noop enrichment called with : ", e.EnrichmentArgs)
-	logr.Info(rs)
+	rs := fmt.Sprintf("noop enrichment called: \nalert: %s\nenrichment: %s\nwith args: %s", alert.AlertName, e.EnrichmentName, e.EnrichmentArgs)
+
+	logr.Debug(rs)
 
 	return rs, nil
 }

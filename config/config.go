@@ -18,9 +18,11 @@ func GetAmConfig() *types.AlertManagerConfig {
 func ValidateAndLoad(b []byte) (*types.AlertManagerConfig, error) {
 	amConfig := GetAmConfig()
 
-	// todo protect this by a Mutex
+	// todo: protect this by a Mutex
 	// a write mutex is enough
-	// todo
+	// we will need this once we start hotloading of the config.
+	// for now this is fine
+	// todo:
 	// try to use a strict unmarshalling like in json
 	err := yaml.Unmarshal(b, &amConfig)
 	if err != nil {
@@ -36,7 +38,7 @@ func ValidateAndLoad(b []byte) (*types.AlertManagerConfig, error) {
 	// do better validation
 	// right now it accepts a stray key in the list of alert_pipelines
 	// and ingects an empty alert-config
-	// Filter out the empty entr for now.
+	// filter out the empty entry for now.
 	// maybe check if json-schema etc can help here
 	return amConfig, nil
 }

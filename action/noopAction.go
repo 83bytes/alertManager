@@ -6,16 +6,15 @@ import (
 	"fmt"
 )
 
-func NoopAction(a types.Action, resultMap map[string]interface{}) error {
+func NoopAction(alert types.Alert, action types.Action, resultMap map[string]interface{}) error {
 	logr := logging.GetLogger()
-	logr.Debug("noop action called")
-	rs := fmt.Sprintf("noop action called \n")
+
+	rs := fmt.Sprintf("noop action called \nalert: %s \naction: %s \n", alert.AlertName, action.ActionName)
 
 	for k, v := range resultMap {
 		if s, ok := v.(string); ok {
-			rs += fmt.Sprintf("result of %s enrichment; is -> %s \n", k, s)
+			rs += fmt.Sprintf("result of %s enrichment(s):  %s \n", k, s)
 		}
-
 	}
 
 	logr.Debug(rs)

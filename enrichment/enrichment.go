@@ -8,8 +8,9 @@ func GetEnrichmentMap() *EnrichmentLut {
 	return &enrichmentMap
 }
 
-type EnrichmentLut map[string]func(types.Enrichment) (interface{}, error)
+type EnrichmentFunc func(types.Alert, types.Enrichment) (interface{}, error)
+type EnrichmentLut map[string]EnrichmentFunc
 
-func (flut EnrichmentLut) Add(fname string, f func(types.Enrichment) (interface{}, error)) {
+func (flut EnrichmentLut) Add(fname string, f EnrichmentFunc) {
 	flut[fname] = f
 }

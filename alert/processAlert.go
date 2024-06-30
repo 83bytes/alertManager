@@ -21,9 +21,18 @@ func LoadAlertFromPayload(a *types.Alert) error {
 // If an alert-pipeline is configured for given alert
 // this function executes the enrichments one-by-one
 // then it executes the actions one-by-one
-// The body of the Action is passed to all the enrichment and action
+// The body of the Alert is passed to all the enrichment and action
 // so that they have the complete context regarding what is going on
 // The actions additionally will also contain the output of all the enrichments
+
+// todo:
+// actions and enrichments are not able to pick "specific information" from the Alert.
+// want to add the ability to pick x.y.z field from the alert json.
+// this will further power things like "lookup ip from alert and grab x,y,z metrics from grafana"
+
+// todo:
+// process each enrichment concurrently using goroutines and channels etc
+
 func ProcessAlert(a types.Alert) {
 	logr := logging.GetLogger()
 	an := a.GetAlertName()
@@ -50,7 +59,7 @@ func ProcessAlert(a types.Alert) {
 		logr.Info("processing enrichment : ", v.EnrichmentName)
 
 		if f, ok := (*enrichmentMap)[v.EnrichmentName]; ok {
-			resMap[v.EnrichmentName], err = f(v)
+			resMap[v.EnrichmentName], err = f(a, v)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -62,11 +71,10 @@ func ProcessAlert(a types.Alert) {
 		logr.Info("processing action : ", v.ActionName)
 
 		if f, ok := (*actionMap)[v.ActionName]; ok {
-			err := f(v, resMap)
+			err := f(a, v, resMap)
 			if err != nil {
 				fmt.Println(err)
 			}
 		}
 	}
-
 }

@@ -8,8 +8,10 @@ func GetActionMap() *ActionLut {
 	return &actionMap
 }
 
-type ActionLut map[string]func(types.Action, map[string]interface{}) error
+type ActionFunc func(types.Alert, types.Action, map[string]interface{}) error
 
-func (flut ActionLut) Add(fname string, f func(types.Action, map[string]interface{}) error) {
+type ActionLut map[string]ActionFunc
+
+func (flut ActionLut) Add(fname string, f ActionFunc) {
 	flut[fname] = f
 }
