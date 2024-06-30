@@ -41,7 +41,7 @@ func (am *AlertManagerConfig) GetPipelineForAlert(name string) *AlertPipelineCon
 	logr := logging.GetLogger()
 	for _, pipes := range am.AlertPipelines {
 		if pipes.AlertName == name {
-			logr.Debug("Pipeline found for alert : ", name)
+			logr.Debug("pipeline found for alert : ", name)
 			return &pipes
 		}
 	}
