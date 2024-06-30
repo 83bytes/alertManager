@@ -92,7 +92,7 @@ func TestValidateAndLoad(t *testing.T) {
 				b: []byte(`randomKey: randonValue
 		randomKey2: randomValue2`),
 			},
-			want:    types.AlertManagerConfig{},
+			want:    types.AlertManagerConfig{}, // doesnt matter here
 			wantErr: true,
 		},
 		{
@@ -100,8 +100,8 @@ func TestValidateAndLoad(t *testing.T) {
 			args: args{
 				b: []byte(badAlertConfigNoStepName),
 			},
-			want:    types.DefaultAlertManagerConfig(),
-			wantErr: false,
+			want:    types.AlertManagerConfig{}, // doesnt matter here
+			wantErr: true,
 		},
 	}
 
@@ -109,8 +109,7 @@ func TestValidateAndLoad(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := ValidateAndLoad(tt.args.b)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ValidateAndLoad() error = %v, wantErr %v", err, tt.wantErr)
-				return
+				t.Fatalf("ValidateAndLoad() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
 			// dereference the pointer for got to make deepequal happy

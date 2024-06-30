@@ -59,7 +59,7 @@ func ProcessAlert(a types.Alert) {
 		logr.Info("processing enrichment : ", v.EnrichmentName)
 
 		if f, ok := (*enrichmentMap)[v.EnrichmentName]; ok {
-			resMap[v.EnrichmentName], err = f(a, v)
+			resMap[v.StepName], err = f(a, v)
 			if err != nil {
 				fmt.Println(err)
 			}

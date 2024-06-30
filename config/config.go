@@ -41,13 +41,13 @@ func ValidateAndLoad(b []byte) (*types.AlertManagerConfig, error) {
 	for _, v := range amConfig.AlertPipelines {
 		for _, e := range v.Enrichments {
 			if len(e.StepName) <= 0 {
-				return amConfig, fmt.Errorf("unable to load config, please check format")
+				return &types.AlertManagerConfig{}, fmt.Errorf("unable to load config, please check format")
 			}
 		}
 
 		for _, v := range v.Actions {
 			if len(v.StepName) <= 0 {
-				return amConfig, fmt.Errorf("unable to load config, please check format")
+				return &types.AlertManagerConfig{}, fmt.Errorf("unable to load config, please check format")
 			}
 		}
 		//
