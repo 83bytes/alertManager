@@ -1,15 +1,22 @@
 alert_pipelines:
   - alert_name: NOOP_ALERT
     enrichments:
-      - enrichment_name: UPPER_CASE
+      - step_name: ENRICHMENT_STEP_1
+        enrichment_name: UPPER_CASE
+        enrichment_args: arg1,arg2
+      - step_name: ENRICHMENT_STEP_2
+        enrichment_name: NOOP_ENRICHMENT
         enrichment_args: arg1,arg2
     actions:
-      - action_name: NOOP_ACTION
+      - step_name: ACTION_STEP_1
+        action_name: NOOP_ACTION
         action_args: ARG1,ARG2
   - alert_name: KubePodCrashLooping
     enrichments:
-      - enrichment_name: GetMetric
+      - step_name: ENRICHMENT_STEP_1
+        enrichment_name: GET_DATA
         enrichment_args: "promql"
     actions:
-      - action_name: NotifySLack
+      - step_name: ACTION_STEP_1
+        action_name: NotifySLack
         action_args: "url"

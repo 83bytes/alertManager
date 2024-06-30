@@ -30,9 +30,27 @@ func ValidateAndLoad(b []byte) (*types.AlertManagerConfig, error) {
 			fmt.Errorf("unable to load config, please check format; %s", err)
 	}
 
+	// the key alert_pipelines should be present
 	if len(b) > 0 && amConfig.AlertPipelines == nil {
 		return &types.AlertManagerConfig{},
 			fmt.Errorf("unable to load config, please check format")
+	}
+
+	// each action and enrichment should have a step_name configured
+	// and they should not match
+	for _, v := range amConfig.AlertPipelines {
+		for _, e := range v.Enrichments {
+			if len(e.StepName) <= 0 {
+				return amConfig, fmt.Errorf("unable to load config, please check format")
+			}
+		}
+
+		for _, v := range v.Actions {
+			if len(v.StepName) <= 0 {
+				return amConfig, fmt.Errorf("unable to load config, please check format")
+			}
+		}
+		//
 	}
 	// todo:
 	// do better validation

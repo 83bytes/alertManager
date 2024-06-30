@@ -28,3 +28,11 @@ Alert -> Enrichment(s) -> Action(s)
 ## OverAll Plan
 
 - I load the config to see
+
+# promQL enrichment
+
+process this query for now
+
+```
+curl 'http://localhost:9090/api/v1/query?query=sum%28rate%28node_cpu_seconds_total%5B1m%5D%29%29&time=1719778255.812'
+```
