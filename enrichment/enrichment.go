@@ -22,5 +22,6 @@ func LoadEnrichments() {
 	enr := GetEnrichmentMap()
 	enr.Add("NOOP_ENRICHMENT", NoopEnrichment)
 	enr.Add("UPPER_CASE", UpperCaseEnrichment)
+	enr.Add("GetPromQL", GetPromQLEnrichment)
 
 }

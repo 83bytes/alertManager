@@ -5,8 +5,8 @@ alert_pipelines:
         enrichment_name: UPPER_CASE
         enrichment_args: arg1,arg2
       - step_name: ENRICHMENT_STEP_2
-        enrichment_name: NOOP_ENRICHMENT
-        enrichment_args: arg1,arg2
+        enrichment_name: GetPromQL
+        enrichment_args: "http://localhost:9090/api/v1/query?query=sum%28rate%28node_cpu_seconds_total%5B1m%5D%29%29&time=1719778255.812"
     actions:
       - step_name: ACTION_STEP_1
         action_name: NOOP_ACTION
