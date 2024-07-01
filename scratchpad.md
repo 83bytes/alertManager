@@ -36,3 +36,13 @@ process this query for now
 ```
 curl 'http://localhost:9090/api/v1/query?query=sum%28rate%28node_cpu_seconds_total%5B1m%5D%29%29&time=1719778255.812'
 ```
+
+## SETUP
+
+```
+kind setup cluster
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install prom-stack prometheus-community/kube-prometheus-stack -f values.yml
+
+```

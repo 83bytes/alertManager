@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tam-config
+  labels:
+    app: tam
+data:
+  alert-manager-config-2.yml: |
+    alert_pipelines:
+    - alert_name: NOOP_ALERT
+      enrichments:
+        - step_name: ENRICHMENT_STEP_1
+          enrichment_name: UPPER_CASE
+          enrichment_args: arg1,arg2
+        - step_name: ENRICHMENT_STEP_2
+          enrichment_name: GetPromQL
+          enrichment_args: "http://localhost:9090/api/v1/query?query=sum%28rate%28node_cpu_seconds_total%5B1m%5D%29%29&time=1719778255.812"
+      actions:
+        - step_name: ACTION_STEP_1
+          action_name: NOOP_ACTION
+          action_args: ARG1,ARG2
+        - step_name: ACTION_STEP_1
+          action_name: SendToSlack
+          action_args: "https://hooks.slack.com/services/WEBHOOK_SECRET"
+    - alert_name: etcdInsufficientMembers
+      enrichments:
+        - step_name: ENRICHMENT_STEP_1
+          enrichment_name: UPPER_CASE
+          enrichment_args: arg1,arg2
+      actions:
+        - step_name: ACTION_STEP_1
+          action_name: SendToSlack
+          action_args: "https://hooks.slack.com/services/WEBHOOK_SECRET"
+    - alert_name: etcdMembersDown
+      enrichments:
+        - step_name: ENRICHMENT_STEP_1
+          enrichment_name: UPPER_CASE
+          enrichment_args: arg1,arg2
+      actions:
+        - step_name: ACTION_STEP_1
+          action_name: SendToSlack
+          action_args: "https://hooks.slack.com/services/WEBHOOK_SECRET"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: toy-alert-manager
+  labels:
+    app: tam
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tam
+  template:
+    metadata:
+      labels:
+        app: tam
+    spec:
+      containers:
+        - name: tam
+          image: sohom83/tam:0.0.1
+          args:
+            - "server"
+            - "--config.file=/etc/alertmanager/alert-manager-config-2.yml"
+            - "--log.level=debug"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/alertmanager
+              subPath: alert-manager-config-2.yml
+      volumes:
+        - name: config-volume
+          configMap:
+            name: tam-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tam
+  labels:
+    app: tam
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: tam
+  type: ClusterIP
