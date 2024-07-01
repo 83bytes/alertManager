@@ -11,6 +11,10 @@ alert_pipelines:
       - step_name: ACTION_STEP_1
         action_name: NOOP_ACTION
         action_args: ARG1,ARG2
+      - step_name: ACTION_STEP_1
+        action_name: SendToSlack
+        action_args: "https://hooks.slack.com/services/SECRET"
+
   - alert_name: KubePodCrashLooping
     enrichments:
       - step_name: ENRICHMENT_STEP_1

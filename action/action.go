@@ -22,4 +22,5 @@ func (flut ActionLut) Add(fname string, f ActionFunc) {
 func LoadActions() {
 	actMap := GetActionMap()
 	actMap.Add("NOOP_ACTION", NoopAction)
+	actMap.Add("SendToSlack", SendToSlackAction)
 }
