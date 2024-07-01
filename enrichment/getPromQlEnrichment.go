@@ -51,6 +51,9 @@ func GetPromQLEnrichment(alert types.Alert, e types.Enrichment) (interface{}, er
 	if err != nil {
 		return nil, fmt.Errorf("error unmarshaling JSON: %v", err)
 	}
-
+	// check if result is empty
+	if len(pres.Data.Result) <= 0 {
+		return "", nil
+	}
 	return fmt.Sprint(pres.Data.Result[0].Value[1]), nil
 }

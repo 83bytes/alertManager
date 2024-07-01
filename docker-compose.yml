@@ -2,7 +2,7 @@ version: "3.5"
 services:
   toy_alert_manager:
     container_name: toy_alert_manager
-    image: tam:0.0.1
+    image: alertmanager:0.0.1
     restart: always
     network_mode: host
     ulimits:
@@ -11,10 +11,10 @@ services:
         soft: 1000000
         hard: 1000000
     volumes:
-      - ./alert-manager-config-2.yml:/alert-manager-config-2.yml
+      - ./alert-manager-config.yml:/alert-manager-config.yml
     command:
       - server
       - --config-file
-      - "./alert-manager-config-2.yml"
+      - "./alert-manager-config.yml"
       - --log-level
       - DEBUG

@@ -51,7 +51,6 @@ func ProcessAlert(a types.Alert) {
 	actionMap := action.GetActionMap()
 
 	// these are used to capture the result of the enrichments
-	var err error
 	resMap := make(map[string]interface{}, len(p.Enrichments))
 
 	// process enrichments
@@ -59,10 +58,11 @@ func ProcessAlert(a types.Alert) {
 		logr.Info("processing enrichment : ", v.EnrichmentName)
 
 		if f, ok := (*enrichmentMap)[v.EnrichmentName]; ok {
-			resMap[v.StepName], err = f(a, v)
+			tt, err := f(a, v)
 			if err != nil {
-				fmt.Println(err)
+				logr.Error("error from processing function")
 			}
+			resMap[v.StepName] = tt
 		} else {
 			logr.Info("no enrichment found with name: ", v.EnrichmentName)
 		}
@@ -75,7 +75,7 @@ func ProcessAlert(a types.Alert) {
 		if f, ok := (*actionMap)[v.ActionName]; ok {
 			err := f(a, v, resMap)
 			if err != nil {
-				fmt.Println(err)
+				logr.Error("error processing action:", err)
 			}
 		} else {
 			logr.Info("no action found with name: ", v.ActionName)
