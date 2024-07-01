@@ -5,7 +5,7 @@ metadata:
   labels:
     app: tam
 data:
-  alert-manager-config-2.yml: |
+  alert-manager-config.yml: |
     alert_pipelines:
     - alert_name: NOOP_ALERT
       enrichments:
@@ -62,12 +62,12 @@ spec:
           image: sohom83/tam:0.0.1
           args:
             - "server"
-            - "--config.file=/etc/alertmanager/alert-manager-config-2.yml"
-            - "--log.level=debug"
+            - "--config-file=/etc/alertmanager/alert-manager-config.yml"
+            - "--log-level=debug"
           volumeMounts:
             - name: config-volume
-              mountPath: /etc/alertmanager
-              subPath: alert-manager-config-2.yml
+              mountPath: /etc/alertmanager/alert-manager-config.yml
+              subPath: alert-manager-config.yml
       volumes:
         - name: config-volume
           configMap:
@@ -81,8 +81,8 @@ metadata:
     app: tam
 spec:
   ports:
-    - port: 8080
-      targetPort: 8080
+    - port: 8081
+      targetPort: 8081
   selector:
     app: tam
   type: ClusterIP

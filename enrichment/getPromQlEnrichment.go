@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -35,7 +34,7 @@ func GetPromQLEnrichment(alert types.Alert, e types.Enrichment) (interface{}, er
 
 	resp, err := http.Get(e.EnrichmentArgs)
 	if err != nil {
-		log.Fatal(err)
+		return nil, fmt.Errorf("error reaching server at: %s", e.EnrichmentArgs)
 	}
 	defer resp.Body.Close()
 
