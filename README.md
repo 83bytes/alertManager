@@ -40,6 +40,65 @@ action: SendToSlack
 result of ENRICHMENT_STEP_1 enrichment(s):  ARG1,ARG2
 ```
 
+## Running the CLI
+
+TAM is a cli application that works in 2 operating mode.
+The first one is the configuration mode, where the binary can either generate a sample config or validate a config-file. This ensures that users have a way of validating a config before deploying it in an environment.
+
+The `config mode` is accessed by using the `config` subcommand in the alertmanager cli.
+
+```
+$ ./alertmanager config --help
+Use this command to validate an existing config-file or to generate a sample template
+
+Usage:
+  alertmanager config [command]
+
+Available Commands:
+  generate-template generate a sample config template
+  validate          validate a config-file for errors
+
+Flags:
+  -h, --help   help for config
+
+Use "alertmanager config [command] --help" for more information about a command.
+
+```
+
+The `server mode` is when the tam is operating as a server and accepts webhook at `url:port/webhook` api-endpoint
+
+```
+$ ./alertmanager server --help
+Start the AlertManager Webhook Server
+
+Usage:
+  alertmanager server [flags]
+
+Flags:
+      --config-file string   Path to alert config (default "./alert-manager-config.yml")
+  -h, --help                 help for server
+      --log-level string     log-level for alertmanager; options INFO|DEBUG|ERROR (default "INFO")
+      --server-port int      Port to listen on (default 8081)
+```
+
+## API Endpoint
+
+### /ping
+
+Basic health-check endpoint. Get `/ping` responds with a `pong`
+
+### /webhook/
+
+Accepts json as a POST request.
+
+Sending a request using curl
+
+```
+curl -v -H "Content-Type: application/json" -X POST localhost:8081/webhook -d @basicWebhookPayload.json
+```
+
+[Sample Json Payload](./basicWebhookPayload.json)
+
 # Design
 
 The tam is a simple webhook server.
