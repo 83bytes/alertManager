@@ -8,7 +8,6 @@ ALERTMANAGER_VERSION := $(shell ./alertmanager --version | cut -d" " -f3)
 sed:
 	sed -i 's/WEBHOOK_SECRET/${WEBHOOK_SECRET}/' alert-manager-config.yml
 	sed -i 's/WEBHOOK_SECRET/${WEBHOOK_SECRET}/' deployment/toy_alert_manager.yml
-	# sed 's/WEBHOOK_SECRET/${WEBHOOK_SECRET}/' alert-manager-config.yml
 
 clean: 
 	rm alertmanager
