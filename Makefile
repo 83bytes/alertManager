@@ -17,7 +17,7 @@ build: vet
 	go build -tags netgo
 
 docker-build: build
-	 docker build -t alertmanager:$(ALERTMANAGER_VERSION) -f Dockerfile .
+	 docker build --no-cache -t alertmanager:$(ALERTMANAGER_VERSION) -f Dockerfile .
 
 docker-push: docker-build
 	docker tag alertmanager:$(ALERTMANAGER_VERSION) sohom83/tam:$(ALERTMANAGER_VERSION)

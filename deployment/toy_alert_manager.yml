@@ -60,6 +60,7 @@ spec:
       containers:
         - name: tam
           image: sohom83/tam:0.0.1
+          imagePullPolicy: Always
           args:
             - "server"
             - "--config-file=/etc/alertmanager/alert-manager-config.yml"
